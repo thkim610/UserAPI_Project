@@ -1,8 +1,6 @@
-package com.example.user.db;
+package com.example.user.model;
 
 import lombok.*;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
@@ -11,12 +9,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-@Table(name = "user")
-public class UserEntity {
+public class UserDto {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String password;
     private String nickName;
