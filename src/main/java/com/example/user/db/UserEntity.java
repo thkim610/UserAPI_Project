@@ -3,6 +3,7 @@ package com.example.user.db;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -24,4 +25,5 @@ public class UserEntity {
     private String name;
     private String phoneNumber;
     private String email;
+    private LocalDateTime registeredAt;
 }
