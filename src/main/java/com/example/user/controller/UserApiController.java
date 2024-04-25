@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -24,6 +25,12 @@ public class UserApiController {
         UserDto userDto = userService.join(userRequest);
 
         return new ResponseEntity<>(userDto, HttpStatus.CREATED); //응답코드 201로 반환.
+    }
+
+    //회원 목록 조회
+    @GetMapping("/list")
+    public List<UserDto> list(){
+        return userService.all();
     }
 
 }

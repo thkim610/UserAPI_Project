@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -37,4 +39,20 @@ public class UserService {
     }
 
 
+    //회원 목록 조회
+    public List<UserDto> all() {
+
+        List<UserEntity> userEntityList = userRepository.findAll();
+
+        //엔터티 리스트 -> DTO 리스트로 변환.
+        List<UserDto> userDtoList = userEntityList.stream()
+                .map(it -> {
+                    return userConverter.toDto(it);
+                })
+                .collect(Collectors.toList());
+
+
+        return userDtoList;
+
+    }
 }
