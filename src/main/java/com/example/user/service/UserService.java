@@ -1,17 +1,18 @@
 package com.example.user.service;
 
-import com.example.common.Api;
-import com.example.common.Pagination;
+import com.example.user.common.Api;
+import com.example.user.common.Pagination;
 import com.example.user.db.UserEntity;
 import com.example.user.db.UserRepository;
 import com.example.user.model.UserDto;
+import com.example.user.model.UserEditRequest;
 import com.example.user.model.UserRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -85,5 +86,40 @@ public class UserService {
 
         //페이징 된 가입일 desc , 이름 asc 정렬 된 회원리스트 반환
         return userRepository.findAllByOrderByRegisteredAtDescNameAsc(pageable);
+    }
+
+    //회원 정보 수정
+    //비밀번호, 닉네임, 전화번호, 이메일 변경 가능.
+    @Transactional // 트랜잭션 범위 내에서 엔티티 상태 변경이 자동으로 DB에 반영.
+    public UserDto edit(UserEditRequest userEditRequest, String userId) {
+
+        //회원 정보가 존재하는지 체크
+        UserEntity userEditEntity = userRepository.findByUserId(userId).map(it -> {
+            //있으면, 회원정보 수정
+            //수정 요청에 값이 있을때만 변경
+            if(userEditRequest.getPassword() != null){
+                it.setPassword(userEditRequest.getPassword());
+            }
+            if(userEditRequest.getNickName() != null){
+                it.setNickName(userEditRequest.getNickName());
+            }
+            if(userEditRequest.getPhoneNumber() != null){
+                it.setPhoneNumber(userEditRequest.getPhoneNumber());
+            }
+            if(userEditRequest.getEmail() != null){
+                it.setEmail(userEditRequest.getEmail());
+            }
+
+            return it;
+        }).orElseThrow(() -> { //없으면, 예외처리
+                    return new RuntimeException("회원정보가 존재하지 않습니다. : " + userId);
+                }
+        );
+
+
+        UserDto userEditDto = userConverter.toDto(userEditEntity);
+
+        return userEditDto;
+
     }
 }
