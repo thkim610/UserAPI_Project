@@ -1,5 +1,6 @@
 package com.example.user.controller;
 
+import com.example.common.Api;
 import com.example.user.model.UserDto;
 import com.example.user.model.UserRequest;
 import com.example.user.service.UserService;
@@ -29,8 +30,12 @@ public class UserApiController {
 
     //회원 목록 조회
     @GetMapping("/list")
-    public List<UserDto> list(){
-        return userService.all();
+    public ResponseEntity<Api<List<UserDto>>> list(@RequestParam(defaultValue = "0") int page,
+                                   @RequestParam(defaultValue = "10") int pageSize){
+
+        Api<List<UserDto>> listApi = userService.all(page, pageSize);
+
+        return new ResponseEntity<>(listApi,HttpStatus.OK);
     }
 
 }

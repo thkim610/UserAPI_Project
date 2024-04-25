@@ -1,10 +1,16 @@
 package com.example.user.service;
 
+import com.example.common.Api;
+import com.example.common.Pagination;
 import com.example.user.db.UserEntity;
 import com.example.user.db.UserRepository;
 import com.example.user.model.UserDto;
 import com.example.user.model.UserRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -40,19 +46,43 @@ public class UserService {
 
 
     //회원 목록 조회
-    public List<UserDto> all() {
+    public Api<List<UserDto>> all(int page, int pageSize) {
 
-        List<UserEntity> userEntityList = userRepository.findAll();
+        Page<UserEntity> userList = toUserEntityPageList(page, pageSize);
+
+        //페이지 정보 생성
+        Pagination pagination = Pagination.builder()
+                .page(userList.getNumber())
+                .pageSize(userList.getSize())
+                .currentElements(userList.getNumberOfElements()) //현재 페이지의 항목 개수
+                .totalPage(userList.getTotalPages())
+                .totalElements(userList.getTotalElements())
+                .build();
 
         //엔터티 리스트 -> DTO 리스트로 변환.
-        List<UserDto> userDtoList = userEntityList.stream()
+        List<UserDto> userDtoList = userList.stream()
                 .map(it -> {
                     return userConverter.toDto(it);
                 })
                 .collect(Collectors.toList());
 
+        Api<List<UserDto>> UserListApi = Api.<List<UserDto>>builder()
+                .body(userDtoList) //회원 리스트
+                .pagination(pagination) //페이지 정보
+                .build();
 
-        return userDtoList;
 
+        return UserListApi;
+
+    }
+
+    //페이징 처리를 위한 페이지 설정
+    private Page<UserEntity> toUserEntityPageList(int page, int pageSize) {
+
+        //페이징을 위한 Pageable 객체 생성
+        Pageable pageable = PageRequest.of(page, pageSize);
+
+        //페이징 된 가입일 desc , 이름 asc 정렬 된 회원리스트 반환
+        return userRepository.findAllByOrderByRegisteredAtDescNameAsc(pageable);
     }
 }
