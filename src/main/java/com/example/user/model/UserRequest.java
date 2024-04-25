@@ -6,6 +6,7 @@ import javax.validation.constraints.*;
 
 /**
  * 클라이언트로부터 받아오는 데이터 정보를 담음.
+ * - 회원 id : not null
  * - 비밀번호 : not null , 10자리
  * - 회원이름 : not null
  * - 닉네임 : not null
@@ -19,6 +20,9 @@ import javax.validation.constraints.*;
 @ToString
 @Builder
 public class UserRequest {
+
+    @NotBlank
+    private String userId;
 
     @NotBlank
     @Size(min = 10, max = 10)

@@ -30,6 +30,7 @@ public class UserService {
         //클라이언트 정보로 엔티티 생성
         UserEntity entity = UserEntity.builder()
                 .name(userRequest.getName())
+                .userId(userRequest.getUserId())
                 .password(userRequest.getPassword())
                 .nickName(userRequest.getNickName())
                 .phoneNumber(userRequest.getPhoneNumber())

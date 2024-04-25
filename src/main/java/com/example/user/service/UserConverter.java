@@ -11,6 +11,7 @@ public class UserConverter {
     public UserDto toDto(UserEntity userEntity){
         return UserDto.builder()
                 .id(userEntity.getId())
+                .userId(userEntity.getUserId())
                 .name(userEntity.getName())
                 .password(userEntity.getPassword())
                 .nickName(userEntity.getNickName())

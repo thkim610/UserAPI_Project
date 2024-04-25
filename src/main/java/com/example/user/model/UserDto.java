@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 public class UserDto {
 
     private Long id;
+    private String userId;
     private String password;
     private String nickName;
     private String name;
