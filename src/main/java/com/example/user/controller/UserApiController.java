@@ -4,6 +4,8 @@ import com.example.user.model.UserDto;
 import com.example.user.model.UserRequest;
 import com.example.user.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -17,9 +19,11 @@ public class UserApiController {
 
     //회원가입
     @PostMapping("/join")
-    public UserDto join(@RequestBody @Valid UserRequest userRequest){
+    public ResponseEntity<UserDto> join(@RequestBody @Valid UserRequest userRequest){
 
-        return userService.join(userRequest);
+        UserDto userDto = userService.join(userRequest);
+
+        return new ResponseEntity<>(userDto, HttpStatus.CREATED); //응답코드 201로 반환.
     }
 
 }
