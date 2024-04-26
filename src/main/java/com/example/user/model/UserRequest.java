@@ -25,7 +25,7 @@ public class UserRequest {
     private String userId;
 
     @NotBlank
-    @Size(min = 10, max = 20, message = "비밀번호는 10자리 이상이어야 합니다.")
+    @Size(min = 10, max = 20, message = "비밀번호는 10자리 이상 20자리 이하여야 합니다.")
     private String password;
 
     @NotBlank
