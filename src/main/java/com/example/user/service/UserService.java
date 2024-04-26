@@ -48,7 +48,7 @@ public class UserService {
                 .userId(userRequest.getUserId())
                 .password(userRequest.getPassword())
                 .nickName(userRequest.getNickName())
-                .phoneNumber(userRequest.getPhoneNumber())
+                .phoneNumber(userRequest.getPhoneNumber().replaceAll("[^0-9]", "")) //특수문자 제거.
                 .email(userRequest.getEmail())
                 .registeredAt(LocalDateTime.now())
                 .build();
