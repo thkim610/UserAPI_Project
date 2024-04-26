@@ -2,6 +2,8 @@ package com.example.user.service;
 
 import com.example.user.common.Api;
 import com.example.user.common.Pagination;
+import com.example.user.common.exception.ApiException;
+import com.example.user.common.exception.UserErrorCode;
 import com.example.user.db.UserEntity;
 import com.example.user.db.UserRepository;
 import com.example.user.model.UserDto;
@@ -112,7 +114,7 @@ public class UserService {
 
             return it;
         }).orElseThrow(() -> { //없으면, 예외처리
-                    return new RuntimeException("회원정보가 존재하지 않습니다. : " + userId);
+                    return new ApiException(UserErrorCode.USER_NOT_FOUND, "회원정보가 존재하지 않습니다. : [로그인 ID] = " + userId);
                 }
         );
 
