@@ -25,7 +25,7 @@ public class UserRequest {
     private String userId;
 
     @NotBlank
-    @Size(min = 10, max = 10)
+    @Size(min = 10, max = 20, message = "비밀번호는 10자리 이상이어야 합니다.")
     private String password;
 
     @NotBlank
@@ -37,10 +37,10 @@ public class UserRequest {
     @NotBlank
     //전화번호 정규식 : 01로 시작하고 (0,1,,6,7,8,9) 중 하나의 문자 + -(선택)(3~4자리 숫자) + -(선택)(4자리 숫자)
     //ex : 010-000(0)-0000 or 01000000000
-    @Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$", message = "올바른 형식의 전화번호이어야 합니다.")
+    @Pattern(regexp = "^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$", message = "전화번호 형식이어야 합니다.")
     private String phoneNumber;
 
     @NotBlank
-    @Email
+    @Email(message = "이메일 형식이어야 합니다.")
     private String email;
 }
