@@ -39,14 +39,11 @@
 | --- | --- | --- | --- |
 | id | Long | 회원 번호 | PK , NOT NULL |
 | user_id | String | 회원 ID | Unique, NOT NULL |
-| password | String | 비밀번호 | 10자리, NOT NULL |
+| password | String | 비밀번호 | 10자리 이상, NOT NULL |
 | nick_name | String | 닉네임 | NOT NULL |
 | name | String | 이름 | NOT NULL |
-| phone_number | String | 전화번호 | 전화번호 형식, NOT NULL
--예1 : 01011112222
--예2 : 010-111(1)-2222 |
-| email | String | 이메일 | 이메일 형식, NOT NULL
--예 : aa@bb.cc |
+| phone_number | String | 전화번호 | 전화번호 형식, NOT NULL <br> 예1) 01011112222 <br> 예2)  010-111(1)-2222 |
+| email | String | 이메일 | 이메일 형식, NOT NULL <br> 예) aa@bb.cc |
 | registered_at | DATETIME | 가입일 | NOT NULL |
 
 ### ERD
