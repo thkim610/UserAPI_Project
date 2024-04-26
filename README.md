@@ -1,4 +1,5 @@
 # 회원(USER) 기능 RESTful API
+이 프로젝트는 window 환경에서 테스트 되었습니다.
 
 ## 🖥️ Versions
 
@@ -140,6 +141,9 @@ tasks.named('test') {
 
 ```
 
+## 데이터베이스 설정
+MySQL에서 `user` 데이터베이스를 생성하고, 제공된 [`user.sql`](https://github.com/thkim610/UserAPI_Project/blob/main/user.sql) 파일을 사용하여 스키마를 초기화하세요.
+
 ### application.yaml
 
 MySQL 연동을 위해 다음과 같이 작성해주세요.
@@ -154,8 +158,41 @@ spring:
     hibernate:
       ddl-auto: validate # 애플리케이션 시작 시, Entity 클래스와 데이터베이스 테이블 구조를 비교 검증
   datasource:
-    url: jdbc:mysql://localhost:3306/{사용할 데이터베이스 이름}?serverTimezone=Asia/Seoul # 데이터베이스 연결 URL(서버 시간대 : 'Asia/Seoul')
+    url: jdbc:mysql://localhost:3306/user?serverTimezone=Asia/Seoul # 데이터베이스 연결 URL(서버 시간대 : 'Asia/Seoul')
     driver-class-name: com.mysql.cj.jdbc.Driver # MySQL JDBC 드라이버의 클래스 이름
     username: # 데이터베이스 연결을 위한 사용자 이름
     password: # 데이터베이스 연결을 위한 비밀번호
 ```
+
+## 기능 및 사용방법
+
+### 회원가입
+`POST /api/user/join`을 사용하여 회원 가입을 진행할 수 있습니다.
+
+예제 요청
+```json
+{
+  "user_id": "string",
+  "password": "stringstri",
+  "nick_name": "string",
+  "name": "string",
+  "phone_number": "010-6943361",
+  "email": "string@aa.com"
+}
+```
+
+### 회원목록 조회
+`GET /api/user/list`를 사용하여 회원목록을 조회할 수 있습니다.
+쿼리 파라미터로 `page`, `pageSize` 값을 넘기면 페이징 처리가 가능합니다.
+
+### 회원 정보 수정
+`PUT /api/user/{userId}`를 사용하여 회원 정보(비밀번호, 닉네임, 전화번호, 이메일)를 수정할 수 있습니다.
+
+예제 요청
+```json
+{
+  "password": "integerint",
+  "nick_name": "integer",
+  "phone_number": "011-365-1428",
+  "email": "integer@aa.com"
+}
