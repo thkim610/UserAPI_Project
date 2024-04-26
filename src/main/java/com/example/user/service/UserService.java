@@ -10,6 +10,7 @@ import com.example.user.model.UserDto;
 import com.example.user.model.UserEditRequest;
 import com.example.user.model.UserRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,8 +19,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -29,6 +32,13 @@ public class UserService {
 
     //회원가입
     public UserDto join(UserRequest userRequest){
+
+        //회원 id 중복체크
+        Optional<UserEntity> userEntity = userRepository.findByUserId(userRequest.getUserId());
+        if(userEntity.isPresent()){
+            throw new ApiException(UserErrorCode.USER_DUPLICATED,
+                    "이미 존재하는 회원 ID입니다. : [User_ID] = " + userRequest.getUserId());
+        }
 
         //클라이언트 정보로 엔티티 생성
         UserEntity entity = UserEntity.builder()
