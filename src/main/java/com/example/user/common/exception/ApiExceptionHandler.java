@@ -1,6 +1,7 @@
 package com.example.user.common.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -31,11 +32,29 @@ public class ApiExceptionHandler {
                 .body(errorResult);
     }
 
+    @ExceptionHandler(value = TypeMismatchException.class)
+    public ResponseEntity<ErrorResult> exception(TypeMismatchException e){
+
+        log.error("잘못된 데이터 타입 발생", e);
+
+        String errorMessage = "잘못된 데이터 타입의 값이 입력되었습니다.";
+
+        ErrorResult errorResult = ErrorResult.builder()
+                .errorCode(e.getErrorCode())
+                .description(errorMessage)
+                .message("입력된 값 : " + (String) e.getValue())
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(errorResult);
+    }
+
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     public ResponseEntity<Object> exception(MethodArgumentNotValidException e){
 
-        log.error("", e);
+        log.error("데이터 유효성 검증 실패", e);
 
         //에러가 발생한 필드와 메시지 추출
         Map<String, String> errors = new HashMap<>();

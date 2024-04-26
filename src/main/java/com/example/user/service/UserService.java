@@ -36,6 +36,8 @@ public class UserService {
         //회원 id 중복체크
         Optional<UserEntity> userEntity = userRepository.findByUserId(userRequest.getUserId());
         if(userEntity.isPresent()){
+            log.error("회원 id 중복");
+
             throw new ApiException(UserErrorCode.USER_DUPLICATED,
                     "이미 존재하는 회원 ID입니다. : [User_ID] = " + userRequest.getUserId());
         }
@@ -76,7 +78,12 @@ public class UserService {
         //엔터티 리스트 -> DTO 리스트로 변환.
         List<UserDto> userDtoList = userList.stream()
                 .map(it -> {
-                    return userConverter.toDto(it);
+                    try{
+                        return userConverter.toDto(it);
+                    }catch (Exception e){
+                        log.error("변환 중 오류 발생", e);
+                        throw new RuntimeException("변환 중 오류 발생", e);
+                    }
                 })
                 .collect(Collectors.toList());
 
@@ -128,10 +135,14 @@ public class UserService {
                 }
         );
 
+        try{
+            UserDto userEditDto = userConverter.toDto(userEditEntity);
 
-        UserDto userEditDto = userConverter.toDto(userEditEntity);
-
-        return userEditDto;
+            return userEditDto;
+        }catch (Exception e){
+            log.error("변환 중 오류 발생", e);
+            throw new RuntimeException("변환 중 오류 발생", e);
+        }
 
     }
 }
