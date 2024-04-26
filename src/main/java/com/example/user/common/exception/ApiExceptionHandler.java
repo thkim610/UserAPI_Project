@@ -32,6 +32,22 @@ public class ApiExceptionHandler {
                 .body(errorResult);
     }
 
+    @ExceptionHandler(value = NullPointerException.class)
+    public ResponseEntity<ErrorResult> exception(NullPointerException e){
+
+        log.error("Null 값 발생", e);
+
+        ErrorResult errorResult = ErrorResult.builder()
+                .errorCode(UserErrorCode.NULL_POINT.getErrorCode())
+                .description(UserErrorCode.NULL_POINT.getDescription())
+                .message(e.getMessage())
+                .build();
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(errorResult);
+    }
+
     @ExceptionHandler(value = TypeMismatchException.class)
     public ResponseEntity<ErrorResult> exception(TypeMismatchException e){
 
@@ -40,7 +56,7 @@ public class ApiExceptionHandler {
         String errorMessage = "잘못된 데이터 타입의 값이 입력되었습니다.";
 
         ErrorResult errorResult = ErrorResult.builder()
-                .errorCode(e.getErrorCode())
+                .errorCode(UserErrorCode.BAD_REQUEST.getErrorCode())
                 .description(errorMessage)
                 .message("입력된 값 : " + (String) e.getValue())
                 .build();
